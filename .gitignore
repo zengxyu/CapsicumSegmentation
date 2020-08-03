@@ -1,4 +1,6 @@
 .idea
+.git
+__pycache__
 data
 images
 model
