@@ -3,7 +3,8 @@
 __pycache__
 data
 images
-model
+trained_models
+trained_models_bak
 test.py
 test2.py
 

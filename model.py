@@ -6,12 +6,11 @@
     Description :
 -------------------------------------------------
 """
-from data_reader import CapsicumDataset
+from dataloaders.data_reader import CapsicumDataset
 from torchvision.models.segmentation import deeplabv3_resnet101
-from torch import nn, optim, tensor, cuda
+from torch import nn, optim
 from torch.nn import *
 from torch.utils.data import DataLoader
-import cv2 as cv
 import numpy as np
 from constant import *
 import torch
@@ -156,8 +155,8 @@ if __name__ == '__main__':
     print("......Finish training......")
 
     # img = cv.imread("images/empirical_image_color_39.png")
-    # om = model.eval(img)
-    # rgb = model.decode_segmap(om)
+    # om = trained_models.eval(img)
+    # rgb = trained_models.decode_segmap(om)
     # cv.imshow("rgb", rgb)
     # cv.waitKey(0)
     # cv.destroyAllWindows()

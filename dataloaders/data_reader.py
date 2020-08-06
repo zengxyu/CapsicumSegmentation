@@ -15,10 +15,8 @@
 -------------------------------------------------
 """
 
-import os
 import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader, Dataset, random_split
+from torch.utils.data import Dataset
 from torchvision import transforms
 import numpy as np
 import cv2
@@ -38,11 +36,11 @@ class CapsicumDataset(Dataset):
         self.color_map = {}
 
     def __len__(self):
-        return len(os.listdir(base_images_dir))
+        return len(os.listdir(image_dir_base))
 
     def __getitem__(self, idx):
-        img_name = os.listdir(base_images_dir)[idx]
-        imgA = cv2.imread(os.path.join(base_images_dir, img_name))
+        img_name = os.listdir(image_dir_base)[idx]
+        imgA = cv2.imread(os.path.join(image_dir_base, img_name))
         # imgA = cv2.resize(imgA, (RESIZED_IMAGE_HEIGHT, RESIZED_IMAGE_WIDTH))
         imgA = self.transform(imgA)  # 一转成向量后，imgA通道就变成(C,H,W)
         # print(imgA)
@@ -61,8 +59,8 @@ class CapsicumDataset(Dataset):
         cols = np.arange(start=0, stop=IMAGE_WIDTH, step=2)
         # synthesis the label image
         for i in range(NUM_CLASS):
-            class_dir_path = os.path.join(base_label_dir, base_class_dir_format.format(i + 1))
-            image_path = os.path.join(class_dir_path, base_filename_format.format(i + 1, image_index + 1))
+            class_dir_path = os.path.join(label_dir_base, class_dir_format.format(i + 1))
+            image_path = os.path.join(class_dir_path, filename_format.format(i + 1, image_index + 1))
             if not os.path.exists(image_path):
                 print(" The image path does not exist ! ")
             im = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
