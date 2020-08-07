@@ -3,7 +3,7 @@
 -------------------------------------------------
     Author :       Xiangyu Zeng
     Date：          2020/8/3
-    Description :
+    Description :   decode the model output to color mask
 -------------------------------------------------
 """
 import numpy as np

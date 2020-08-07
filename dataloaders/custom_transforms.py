@@ -1,3 +1,11 @@
+"""
+-------------------------------------------------
+    Author :       Xiangyu Zeng
+    Date：          2020/8/4
+    Description :  Customized transforms
+-------------------------------------------------
+"""
+
 import torch
 import random
 import numpy as np

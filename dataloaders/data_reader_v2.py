@@ -3,7 +3,7 @@
 -------------------------------------------------
     Author :       Xiangyu Zeng
     Date：          2020/8/3
-    Description :
+    Description : data reader
 -------------------------------------------------
 """
 from torch.utils.data import Dataset

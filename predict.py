@@ -32,6 +32,10 @@ class Predictor:
         return model
 
     def predict_from_loader(self):
+        """
+        Predict the images loaded from the testing DataLoader
+        :return:
+        """
         # test dataset
         test_dataset = CapsicumDataset(root=root_dir, split="test")
         test_dataset_size = len(test_dataset)
@@ -57,7 +61,7 @@ class Predictor:
 
     def predict_from_image(self, image_path):
         """
-        Given image path, predict the image segmentation by trained model
+        Given image path, predict the mask by trained model
         :param image_path:
         :return:
         """
@@ -77,10 +81,12 @@ class Predictor:
 
 
 def main():
-    # predict image
-    model_name = "model_4-th_epoch.pkl"
+    # the path of the image you wanna predict
+    image_path = "images/empirical_image_color_1.png"
+    # the model name
+    model_name = "model_10-th_epoch_50-th_batch.pkl"
+    # the directory that the decoded output images are saved to
     output_save_dir = "images"
-    image_path = "images/synthetic_image_color_10013.png"
 
     predictor = Predictor(model_name=model_name, output_save_dir=output_save_dir)
     predictor.predict_from_image(image_path=image_path)
