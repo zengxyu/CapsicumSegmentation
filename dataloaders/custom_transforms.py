@@ -56,6 +56,21 @@ class ToTensor(object):
                 'label': mask}
 
 
+class RandomRotate(object):
+    def __init__(self, degree):
+        self.degree = degree
+
+    def __call__(self, sample):
+        img = sample['image']
+        mask = sample['label']
+        rotate_degree = random.uniform(-1 * self.degree, self.degree)
+        img = img.rotate(rotate_degree, Image.BILINEAR)
+        mask = mask.rotate(rotate_degree, Image.NEAREST)
+
+        return {'image': img,
+                'label': mask}
+
+
 class RandomHorizontalFlip(object):
     def __call__(self, sample):
         img = sample['image']
@@ -63,6 +78,18 @@ class RandomHorizontalFlip(object):
         if random.random() < 0.5:
             img = img.transpose(Image.FLIP_LEFT_RIGHT)
             mask = mask.transpose(Image.FLIP_LEFT_RIGHT)
+
+        return {'image': img,
+                'label': mask}
+
+
+class RandomVerticalFlip(object):
+    def __call__(self, sample):
+        img = sample['image']
+        mask = sample['label']
+        if random.random() < 0.5:
+            img = img.transpose(Image.FLIP_TOP_BOTTOM)
+            mask = mask.transpose(Image.FLIP_TOP_BOTTOM)
 
         return {'image': img,
                 'label': mask}
@@ -105,7 +132,7 @@ class RandomScaleCrop(object):
         img = sample['image']
         mask = sample['label']
         # random scale (short edge)
-        short_size = random.randint(int(self.base_size * 0.2), int(self.base_size * 1.0))
+        short_size = random.randint(int(self.base_size * 0.35), int(self.base_size * 0.75))
         w, h = img.size
         if h > w:
             ow = short_size

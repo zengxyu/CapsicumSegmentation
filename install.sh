@@ -1,5 +1,6 @@
 #!/bin/bash
 pip3 install --user numpy
+pip3 install --user tqdm
 pip3 install --user opencv-python
 pip3 install --user sklearn
 pip3 install --user pickle

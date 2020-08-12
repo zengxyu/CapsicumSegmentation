@@ -7,7 +7,8 @@
 -------------------------------------------------
 """
 from torch.utils.data import Dataset
-
+import torch
+from torch import Tensor, FloatTensor, LongTensor
 import pickle
 import numpy as np
 from constant import *
@@ -43,12 +44,15 @@ class CapsicumDataset(Dataset):
         image = Image.open(image_path).convert('RGB')
         # label
         label = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH), dtype=np.int)
-
         # synthesis the label
         for i, label_path in enumerate(label_paths):
             lb = np.array(Image.open(label_path).convert('L'))
-            label += lb * (i + 1)
+            if i <= 2:
+                label += lb * (i + 1)
+            else:
+                label += lb * 3
         label = Image.fromarray(label.astype(np.uint8))
+        # label.show("label", label )
         # sample
         sample = {'image': image, 'label': label}
 
@@ -61,22 +65,29 @@ class CapsicumDataset(Dataset):
             sample = self.cp_transformer.transform_ts(sample)
 
         image = sample['image']
-        label = self.encode_label(sample['label'])
+        label = sample['label']
+        # label = torch.unsqueeze(label, dim=0)
+        # print(label.shape)
+        # label = torch.from_numpy(np.array(label).transpose((2, 0, 1)))
+        # index, freq = sample['label'].unique(return_counts=True)
+        # freq = np.array(freq)
+        # freq = freq/sum(freq)
+        # print(freq)
+        # label = self.encode_label(sample['label'])
+
         # sample
-        return image, label
+        return image.type(torch.FloatTensor), label.type(torch.LongTensor)
 
     def encode_label(self, label):
         # final_label_ont_hot
         h, w = np.shape(label)
-        label_one_hot = np.zeros((h, w, NUM_CLASS + 1), dtype=np.int)
+        label_one_hot = np.zeros((h, w, RE_NUM_CLASS), dtype=np.int)
         iis, jjs = np.shape(label)
         # transform the final label into one hot, final_label_ont_hot with size [ h, w, 7+1 ]
         for i in range(iis):
             for j in range(jjs):
                 try:
-                    label_one_hot[i, j] = np.eye(NUM_CLASS + 1)[int(label[i, j])]
+                    label_one_hot[i, j] = np.eye(RE_NUM_CLASS)[int(label[i, j])]
                 except IndexError:
                     print(IndexError)
-        # for c in range(len(iis)):
-        #     label_one_hot[iis[c], jjs[c]] = np.eye(NUM_CLASS + 1)[int(label[iis[c], jjs[c]])]
         return label_one_hot.transpose((2, 0, 1))

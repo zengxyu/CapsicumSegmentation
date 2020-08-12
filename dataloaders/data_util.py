@@ -28,8 +28,22 @@ class Util:
 
     @staticmethod
     def get_palette():
-        # 0=background
         palette = np.array(
-            [(0, 0, 0), (255, 100, 125), (255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255),
+            # background
+            [(0, 0, 0),
+             # leaf, blue
+             (0, 0, 255),
+             # capsicum, yellow
+             (255, 255, 0),
+             # stem, green
+             (255, 0, 255),
+             # stem
+             (255, 100, 125),
+             # stem
+             (255, 255, 0),
+             # stem
+             (255, 0, 255),
+             # stem
              (0, 255, 255)])
+        # 0=background
         return palette

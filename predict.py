@@ -26,7 +26,7 @@ class Predictor:
 
     def get_model(self, model_name):
         model_path = os.path.join(model_save_dir, model_name)
-        model = Trainer(use_gpus=False).model
+        model = Trainer(use_gpus=False, use_balanced_weights=False).model
         model.load_state_dict(torch.load(model_path))
         model.eval()
         return model
@@ -51,8 +51,8 @@ class Predictor:
             yhat_batch = self.model(x_batch)['out']
             print("yhat_batch shape : ", np.shape(yhat_batch))
             yhat = yhat_batch.argmax(1)
-            rgb = Util.decode_segmap(y[0], NUM_CLASS + 1)
-            rgb_hat = Util.decode_segmap(yhat[0], NUM_CLASS + 1)
+            rgb = Util.decode_segmap(y[0], RE_NUM_CLASS)
+            rgb_hat = Util.decode_segmap(yhat[0], RE_NUM_CLASS)
             print("rgb shape : ", np.shape(rgb))
             hstack = np.hstack([rgb, rgb_hat])
             cv2.imwrite(os.path.join(self.output_save_dir, "pred_img1.png"), hstack)
@@ -69,22 +69,24 @@ class Predictor:
         cp_transformer = ComposedTransformer(base_size=base_size, crop_size=crop_size)
         image = cp_transformer.transform_ts_img(image)
         print('Image shape:', np.shape(image))
+
         x = image.unsqueeze(0)
         yhat = self.model(x)['out'].detach().numpy()
+        print("yhat:", np.shape(yhat))
+
         yhat = yhat.argmax(1)
-        rgb = Util.decode_segmap(yhat[0], NUM_CLASS + 1)
+        rgb = Util.decode_segmap(yhat[0], RE_NUM_CLASS)
         print("rgb shape : ", np.shape(rgb))
-        cv2.imwrite(os.path.join(self.output_save_dir, "pred_img1.png"), rgb)
-        cv2.imshow("rgb", rgb)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+
+        image = Image.fromarray(rgb)
+        image.show(image_path)
 
 
 def main():
     # the path of the image you wanna predict
-    image_path = "images/empirical_image_color_1.png"
+    image_path = "images/synthetic_image_color_10013.png"
     # the model name
-    model_name = "model_10-th_epoch_50-th_batch.pkl"
+    model_name = "model_7-th_epoch.pkl"
     # the directory that the decoded output images are saved to
     output_save_dir = "images"
 
