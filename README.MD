@@ -27,3 +27,4 @@ Run predict.py to predict an image,
     change the variable "image_path" to predict your image, 
     change the variable "model_name" to use another trained model
 
+The project is on updating......
