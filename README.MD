@@ -15,8 +15,8 @@
     --README.MD
     
 
-If you wanna make the train, val, test dataset csv file, run make_train_val_test.py
-If you wanna train the model, run train.py
+Run make_train_val_test.py to make train, val, test dataset csv file, 
+Run train.py to train the model, 
 If you wanna predict one image, 
     change the variable "image_path" to predict your image, 
     change the variable "model_name" to use another trained model
