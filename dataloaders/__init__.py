@@ -11,6 +11,7 @@ from dataloaders.capsicum import CapsicumDataset
 from torch.utils.data import DataLoader
 
 
+
 def data_loader(args):
     print("......Reading dataset......")
     print()
