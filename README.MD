@@ -1,5 +1,5 @@
 Here is a semantic segmentation project, 
-training on the dataset capsicum dataset,
+training on the capsicum dataset,
 using deeplabv3_resnet defined in Pytorch.
 
 # The project structure:
