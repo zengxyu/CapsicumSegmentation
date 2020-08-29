@@ -13,7 +13,6 @@
     --train.py
     --README.MD
     
-The root directory of dataset is "data", defined in the constant.py,
 
 If you wanna make the train, val, test dataset csv file, run make_train_val_test.py
 If you wanna train the model, run train.py
