@@ -18,6 +18,9 @@ using deeplabv3_resnet defined in Pytorch.
     --train.py
     --README.MD
     
+Use following command to check the metrics ( Loss, Acc, IoU ) and intermediate predicted images
+    
+    tensorboard --logdir=train_log_dir --port=6006
 
 Run make_train_val_test.py to make train, val, test dataset csv file, 
 
