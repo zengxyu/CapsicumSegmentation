@@ -19,9 +19,9 @@ using deeplabv3_resnet defined in Pytorch.
     --README.MD
     
 
-Run make_train_val_test.py to make train, val, test dataset csv file, 
-Run train.py to train the model, 
-Run predict.py to predict an image, 
-    change the variable "image_path" to predict your image, 
-    change the variable "model_name" to use another trained model
+#Run make_train_val_test.py to make train, val, test dataset csv file, 
+#Run train.py to train the model, 
+#Run predict.py to predict an image, 
+    ##change the variable "image_path" to predict your image, 
+    ##change the variable "model_name" to use another trained model
 
