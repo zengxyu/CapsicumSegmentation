@@ -18,15 +18,15 @@ using deeplabv3_resnet defined in Pytorch.
     --train.py
     --README.MD
     
-Run make_train_val_test.py to make train, val, test dataset csv file, 
+(1) Run make_train_val_test.py to make train, val, test dataset csv file, 
 
-Run train.py to train the model, 
+(2) Run train.py to train the model, 
 
-Use following command to check the metrics ( Loss, Acc, IoU ) and intermediate predicted images
+(3) Use following command to check the metrics ( Loss, Acc, IoU ) and intermediate predicted images
     
     tensorboard --logdir=train_log_dir --port=6006
     
-Run predict.py to predict an image, 
+(4) Run predict.py to predict an image, 
     change the variable "image_path" to predict your image, 
     change the variable "model_name" to use another trained model
 
