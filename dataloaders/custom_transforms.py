@@ -95,21 +95,6 @@ class RandomVerticalFlip(object):
                 'label': mask}
 
 
-class RandomRotate(object):
-    def __init__(self, degree):
-        self.degree = degree
-
-    def __call__(self, sample):
-        img = sample['image']
-        mask = sample['label']
-        rotate_degree = random.uniform(-1 * self.degree, self.degree)
-        img = img.rotate(rotate_degree, Image.BILINEAR)
-        mask = mask.rotate(rotate_degree, Image.NEAREST)
-
-        return {'image': img,
-                'label': mask}
-
-
 class RandomGaussianBlur(object):
     def __call__(self, sample):
         img = sample['image']
@@ -132,7 +117,7 @@ class RandomScaleCrop(object):
         img = sample['image']
         mask = sample['label']
         # random scale (short edge)
-        short_size = random.randint(int(self.base_size * 0.35), int(self.base_size * 0.75))
+        short_size = random.randint(int(self.base_size * 0.5), int(self.base_size * 1))
         w, h = img.size
         if h > w:
             ow = short_size
@@ -142,15 +127,6 @@ class RandomScaleCrop(object):
             ow = int(1.0 * w * oh / h)
         img = img.resize((ow, oh), Image.BILINEAR)
         mask = mask.resize((ow, oh), Image.NEAREST)
-        padh = 0
-        padw = 0
-        # pad crop
-        if oh < self.crop_size[0]:
-            padh = self.crop_size[0] - oh if oh < self.crop_size[0] else 0
-        if ow < self.crop_size[1]:
-            padw = self.crop_size[1] - ow if ow < self.crop_size[1] else 0
-        img = ImageOps.expand(img, border=(0, 0, padw, padh), fill=0)
-        mask = ImageOps.expand(mask, border=(0, 0, padw, padh), fill=0)
         # random crop crop_size
         w, h = img.size
         x1 = random.randint(0, w - self.crop_size[1])

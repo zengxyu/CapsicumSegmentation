@@ -19,6 +19,7 @@ from dataloaders.composed_transformer import ComposedTransformer
 
 class CapsicumDataset(Dataset):
     def __init__(self, root="data", split="train"):
+        self.NUM_CLASSES = 4
         self.root = root
         self.split = split
         self.data_file = None
@@ -64,19 +65,9 @@ class CapsicumDataset(Dataset):
         elif self.split == 'test':
             sample = self.cp_transformer.transform_ts(sample)
 
-        image = sample['image']
-        label = sample['label']
-        # label = torch.unsqueeze(label, dim=0)
-        # print(label.shape)
-        # label = torch.from_numpy(np.array(label).transpose((2, 0, 1)))
-        # index, freq = sample['label'].unique(return_counts=True)
-        # freq = np.array(freq)
-        # freq = freq/sum(freq)
-        # print(freq)
-        # label = self.encode_label(sample['label'])
-
+        sample = {'image': sample['image'].type(torch.FloatTensor), 'label': sample['label'].type(torch.LongTensor)}
         # sample
-        return image.type(torch.FloatTensor), label.type(torch.LongTensor)
+        return sample
 
     def encode_label(self, label):
         # final_label_ont_hot

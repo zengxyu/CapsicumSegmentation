@@ -3,8 +3,9 @@
     Capsicum Segmentation
     --data (for dataset)
     --dataloaders
-    --trained_models (for trained models)
-    --images    (for the images you wanna predict, and for the decoded output images after you predict)
+    --trained_models (for saving trained models)
+    --images    (for the images you wanna predict)
+    --predicted_masks (for the decoded predicted masks)
     --constant.py
     --install.sh    (for the installation instruction)
     --make_train_val_test.py    (for splitting dataset into 3 parts)

@@ -9,7 +9,9 @@
 
 from sklearn.model_selection import train_test_split
 import pickle
-from constant import *
+import os
+
+NUM_CLASS = 7
 
 
 class SplitTool(object):
@@ -22,9 +24,8 @@ class SplitTool(object):
         if not os.path.exists(label_dir):
             print("Label base directory {} not available ! ".format(label_dir))
         # image paths
-        im_names = os.listdir(image_dir)
-        im_paths = [os.path.join(image_dir, im_name) for im_name in im_names]
-        im_amounts = len(im_names)
+        im_amounts = len(os.listdir(image_dir))
+        im_paths = [os.path.join(image_dir, "synthetic_image_color_{}.png".format(i)) for i in range(1, im_amounts + 1)]
         # labels paths
         lb_paths = []
         for i in range(1, im_amounts + 1):
@@ -44,8 +45,8 @@ class SplitTool(object):
             data.append([im_paths[i], lb_paths[i]])
 
         # split
-        train, test = train_test_split(data, test_size=1 - train_test_ratio, shuffle=True)
-        train, val = train_test_split(train, test_size=1 - train_val_ratio, shuffle=True)
+        train, test = train_test_split(data, test_size=1 - train_test_ratio, shuffle=False)
+        train, val = train_test_split(train, test_size=1 - train_val_ratio, shuffle=False)
         print(".......Write to txt file......")
         # write to train.txt, val.txt, test.txt
         with open(os.path.join(root_dir, "train.txt"), 'wb') as f:
@@ -65,36 +66,39 @@ class SplitTool(object):
     def read_data(root_dir):
         with open(os.path.join(root_dir, "train.txt"), 'rb') as f:
             train = pickle.load(f)
-            print(train)
+            for item in train:
+                print(item)
             f.close()
 
-        with open(os.path.join(root_dir, "val.txt"), 'rb') as f:
-            val = pickle.load(f)
-            print(val)
-            f.close()
-
-        with open(os.path.join(root_dir, "test.txt"), 'rb') as f:
-            test = pickle.load(f)
-            print(test)
-            f.close()
+        # with open(os.path.join(root_dir, "val.txt"), 'rb') as f:
+        #     val = pickle.load(f)
+        #     f.close()
+        #
+        # with open(os.path.join(root_dir, "test.txt"), 'rb') as f:
+        #     test = pickle.load(f)
+        #     f.close()
 
 
-if __name__ == '__main__':
+def make_data():
     root_dir = "data"
     image_dir = "synthetic_image_color"
     label_dir = "synthetic_label_class_grayscale"
     class_dir_format = "synthetic_label_class_{}_grayscale_binary"
     label_format = "synthetic_label_class_{}_grayscale_{}.png"
 
-    # root_dir = "E:\Tobias\Data\data\images"
-    # image_dir = "empirical_image_color"
-    # label_dir = "empirical_label_class_grayscale"
-    # class_dir_format = "empirical_label_class_{}_grayscale_binary"
-    # label_format = "empirical_label_class_{}_grayscale_{}.png"
+    # # root_dir = "E:\Tobias\Data\data\images"
+    # # image_dir = "empirical_image_color"
+    # # label_dir = "empirical_label_class_grayscale"
+    # # class_dir_format = "empirical_label_class_{}_grayscale_binary"
+    # # label_format = "empirical_label_class_{}_grayscale_{}.png"
 
     train_test_ratio = 0.9
     train_val_ratio = 0.9
     print("......Start splitting data......")
     SplitTool.split(root_dir, image_dir, label_dir, class_dir_format, label_format, train_test_ratio, train_val_ratio)
     print("......Finish splitting data......")
-    # SplitTool.read_data(root_dir)
+
+
+if __name__ == '__main__':
+    # SplitTool.read_data("data")
+    make_data()

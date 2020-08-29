@@ -22,13 +22,11 @@ class ComposedTransformer:
         :return:
         """
         img = sample['image']
-        img = transforms.ColorJitter(brightness=0.8, contrast=0.8, saturation=0.8)(img)
+        img = transforms.ColorJitter(brightness=0.5, contrast=0.5, saturation=0.5)(img)
         sample = {'image': img, 'label': sample['label']}
         composed_transforms = transforms.Compose([
             ct.RandomHorizontalFlip(),
-            ct.FixedResize(size=self.crop_size),
-            ct.RandomRotate(30),
-            ct.RandomScaleCrop(base_size=self.base_size, crop_size=self.crop_size, fill=0),
+            ct.RandomScaleCrop(base_size=self.base_size, crop_size=self.crop_size),
             ct.RandomGaussianBlur(),
             ct.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             ct.ToTensor()])
@@ -42,7 +40,6 @@ class ComposedTransformer:
        :return:
        """
         composed_transforms = transforms.Compose([
-            ct.FixedResize(size=self.crop_size),
             ct.FixScaleCrop(crop_size=self.crop_size),
             ct.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             ct.ToTensor()])
