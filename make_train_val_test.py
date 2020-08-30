@@ -16,7 +16,8 @@ NUM_CLASS = 7
 
 class SplitTool(object):
     @staticmethod
-    def split(root_dir, image_dir, label_dir, class_dir_format, label_format, train_test_ratio, train_val_ratio):
+    def split(root_dir, image_dir, label_dir, image_format, class_dir_format, label_format, train_test_ratio,
+              train_val_ratio):
         image_dir = os.path.join(root_dir, image_dir)
         label_dir = os.path.join(root_dir, label_dir)
         if not os.path.exists(image_dir):
@@ -25,7 +26,8 @@ class SplitTool(object):
             print("Label base directory {} not available ! ".format(label_dir))
         # image paths
         im_amounts = len(os.listdir(image_dir))
-        im_paths = [os.path.join(image_dir, "synthetic_image_color_{}.png".format(i)) for i in range(1, im_amounts + 1)]
+        im_paths = [os.path.join(image_dir, image_format.format(i)) for i in
+                    range(1, im_amounts + 1)]
         # labels paths
         lb_paths = []
         for i in range(1, im_amounts + 1):
@@ -83,19 +85,22 @@ def make_data():
     root_dir = "data"
     image_dir = "synthetic_image_color"
     label_dir = "synthetic_label_class_grayscale"
+    image_format = "synthetic_image_color_{}.png"
     class_dir_format = "synthetic_label_class_{}_grayscale_binary"
     label_format = "synthetic_label_class_{}_grayscale_{}.png"
 
-    # # root_dir = "E:\Tobias\Data\data\images"
-    # # image_dir = "empirical_image_color"
-    # # label_dir = "empirical_label_class_grayscale"
-    # # class_dir_format = "empirical_label_class_{}_grayscale_binary"
-    # # label_format = "empirical_label_class_{}_grayscale_{}.png"
+    # root_dir = "E:\Tobias\Data\data\images"
+    # image_dir = "empirical_image_color"
+    # label_dir = "empirical_label_class_grayscale"
+    # image_format = "empirical_image_color_{}.png"
+    # class_dir_format = "empirical_label_class_{}_grayscale_binary"
+    # label_format = "empirical_label_class_{}_grayscale_{}.png"
 
     train_test_ratio = 0.9
     train_val_ratio = 0.9
     print("......Start splitting data......")
-    SplitTool.split(root_dir, image_dir, label_dir, class_dir_format, label_format, train_test_ratio, train_val_ratio)
+    SplitTool.split(root_dir, image_dir, label_dir, image_format, class_dir_format, label_format, train_test_ratio,
+                    train_val_ratio)
     print("......Finish splitting data......")
 
 

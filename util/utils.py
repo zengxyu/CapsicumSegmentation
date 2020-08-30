@@ -12,17 +12,14 @@ def decode_seg_map_sequence(label_masks, num_classes):
     return rgb_masks
 
 
-def decode_segmap(label_mask, num_classes, plot=False):
+def decode_segmap(label_mask, num_classes):
     """Decode segmentation class labels into a color image
     Args:
         label_mask (np.ndarray): an (M,N) array of integer values denoting
           the class label at each spatial location.
-        plot (bool, optional): whether to show the resulting color image
-          in a figure.
     Returns:
         (np.ndarray, optional): the resulting decoded color image.
     """
-
     label_colours = get_capsicum_labels()
 
     r = label_mask.copy()
@@ -32,15 +29,14 @@ def decode_segmap(label_mask, num_classes, plot=False):
         r[label_mask == ll] = label_colours[ll, 0]
         g[label_mask == ll] = label_colours[ll, 1]
         b[label_mask == ll] = label_colours[ll, 2]
-    rgb = np.zeros((label_mask.shape[0], label_mask.shape[1], 3))
-    rgb[:, :, 0] = r / 255.0
-    rgb[:, :, 1] = g / 255.0
-    rgb[:, :, 2] = b / 255.0
-    if plot:
-        plt.imshow(rgb)
-        plt.show()
-    else:
-        return rgb
+    rgb = np.zeros((label_mask.shape[0], label_mask.shape[1], 3)).astype(np.uint8)
+    # rgb[:, :, 0] = r / 255.0
+    # rgb[:, :, 1] = g / 255.0
+    # rgb[:, :, 2] = b / 255.0
+    rgb[:, :, 0] = r
+    rgb[:, :, 1] = g
+    rgb[:, :, 2] = b
+    return rgb
 
 
 def get_capsicum_labels():

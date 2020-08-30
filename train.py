@@ -21,6 +21,7 @@ from dataloaders import data_loader
 import os
 import datetime
 from tqdm import tqdm
+import shutil
 from util.summaries import TensorboardSummary
 from util.metrics import Evaluator
 
@@ -211,6 +212,10 @@ def main():
         except ValueError:
             raise ValueError('Argument --gpu_ids must be a comma-separated list of integers only')
 
+    if os.path.exists(args.train_log_dir):
+        # remove the directory first
+        shutil.rmtree(args.train_log_dir)
+
     if not os.path.exists(args.save_model_dir):
         os.mkdir(args.save_model_dir)
 
@@ -227,7 +232,7 @@ def main():
         trainer.training(epoch=n)
         # do a validation
         trainer.validation(epoch=n)
-        if (n + 1) % 10 == 0:
+        if (n + 1) % 50 == 0:
             trainer.lr_scheduler.step()
 
     print("......Finish training......")
