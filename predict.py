@@ -108,8 +108,9 @@ def predict_from_loader(args):
         time.sleep(1)
 
 
-def main3():
+if __name__ == '__main__':
     import argparse
+
     parser = argparse.ArgumentParser('Pytorch Deeplabv3_resnet Predicting')
     parser.add_argument('--data-dir', type=str, default='E:\Tobias\Data\data\images',
                         help='where the data are placed')
@@ -129,14 +130,13 @@ def main3():
     if not os.path.exists(args.data_dir):
         raise FileNotFoundError
 
+    # predict from loader
     # predict_from_loader(args)
+
+    # predict images
     image_path = "images/synthetic_image_color_1.png"
     ground_truth_path = "images/synthetic_label_class_colorscale_1.png"
 
     pred_mask = predict_single_image(args, image_path)
     ground_truth_mask = load_ground_truth(args, ground_truth_path)
-    compare_pred_mask_and_ground_truth(args, pred_mask, ground_truth_mask,True)
-
-
-if __name__ == '__main__':
-    main3()
+    compare_pred_mask_and_ground_truth(args, pred_mask, ground_truth_mask, True)
