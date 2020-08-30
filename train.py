@@ -130,12 +130,7 @@ class Trainer:
 
                 yhat_batch = yhat_batch['out'].cpu().numpy()
                 y_batch = y_batch.cpu().numpy()
-                print("yhat_batch:", yhat_batch.shape)
-                print("y_batch:", y_batch.shape)
                 yhat_batch = np.argmax(yhat_batch, axis=1)
-                print("yhat_batch:", yhat_batch.shape)
-
-                print()
                 self.evaluator.add_batch(y_batch, yhat_batch)
         print("---[Loss] : {} ".format(mean_val_loss))
         Acc = self.evaluator.Pixel_Accuracy()
