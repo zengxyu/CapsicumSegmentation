@@ -31,7 +31,6 @@ class Predictor:
     def load_model(self):
         model = deeplabv3_resnet101(pretrained=False)
         model.classifier[-1] = Conv2d(256, self.num_classes, 1)
-        model = nn.DataParallel(model)
         model.load_state_dict(torch.load(self.model_path))
         model.eval()
         return model
@@ -122,7 +121,7 @@ if __name__ == '__main__':
                         help='number of classes')
     parser.add_argument('--output', type=str, default='output',
                         help='where the output images are saved')
-    parser.add_argument('--model-path', type=str, default='trained_models/model_20-th_epoch.pkl',
+    parser.add_argument('--model-path', type=str, default='trained_models/model_0-th_epoch.pkl',
                         help='where the trained model is inputted ')
     args = parser.parse_args()
     if not os.path.exists(args.output):
