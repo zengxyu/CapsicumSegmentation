@@ -6,20 +6,21 @@
     Description : data reader
 -------------------------------------------------
 """
-from torch.utils.data import Dataset
-import torch
-from torch import Tensor, FloatTensor, LongTensor
-import pickle
 import numpy as np
-from constant import *
-
+import torch
+from torch.utils.data import Dataset
 from PIL import Image
+import pickle
+import os
+
 from dataloaders.composed_transformer import ComposedTransformer
 
 
 class CapsicumDataset(Dataset):
-    def __init__(self, root="data", split="train"):
-        self.NUM_CLASSES = 4
+    def __init__(self, root="data", split="train", base_size=600, crop_size=(300, 400)):
+        self.num_classes = 4
+        self.image_height = None
+        self.image_width = None
         self.root = root
         self.split = split
         self.data_file = None
@@ -43,17 +44,19 @@ class CapsicumDataset(Dataset):
         image_path, label_paths = self.data[index]
         # image
         image = Image.open(image_path).convert('RGB')
+        if self.image_height is None or self.image_width is None:
+            self.image_width, self.image_height = image.size
         # label
-        label = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH), dtype=np.int)
+        label = np.zeros((self.image_height, self.image_width), dtype=np.int)
         # synthesis the label
         for i, label_path in enumerate(label_paths):
             lb = np.array(Image.open(label_path).convert('L'))
-            if i <= 2:
+            # 0-background, 1-leaf, 2-capsicum, 3,4,5,6,7-different kinds of stems
+            if i < self.num_classes - 1:
                 label += lb * (i + 1)
             else:
-                label += lb * 3
+                label += lb * (self.num_classes - 1)
         label = Image.fromarray(label.astype(np.uint8))
-        # label.show("label", label )
         # sample
         sample = {'image': image, 'label': label}
 
@@ -68,17 +71,3 @@ class CapsicumDataset(Dataset):
         sample = {'image': sample['image'].type(torch.FloatTensor), 'label': sample['label'].type(torch.LongTensor)}
         # sample
         return sample
-
-    def encode_label(self, label):
-        # final_label_ont_hot
-        h, w = np.shape(label)
-        label_one_hot = np.zeros((h, w, RE_NUM_CLASS), dtype=np.int)
-        iis, jjs = np.shape(label)
-        # transform the final label into one hot, final_label_ont_hot with size [ h, w, 7+1 ]
-        for i in range(iis):
-            for j in range(jjs):
-                try:
-                    label_one_hot[i, j] = np.eye(RE_NUM_CLASS)[int(label[i, j])]
-                except IndexError:
-                    print(IndexError)
-        return label_one_hot.transpose((2, 0, 1))

@@ -53,8 +53,7 @@ class Trainer:
         self.lr_scheduler = lr_scheduler.StepLR(optimizer=self.optimizer, step_size=10, gamma=0.1)
         self.evaluator = Evaluator(self.num_classes)
         if self.args.cuda:
-            self.model = nn.DataParallel(self.model, device_ids=range(len(args.gpu_ids)))
-            self.model = self.model.cuda()
+            self.model = nn.DataParallel(self.model, device_ids=list(range(len(args.gpu_ids)))).cuda()
             self.lossfn = self.lossfn.cuda()
 
     def define_model(self):
@@ -64,14 +63,14 @@ class Trainer:
         return model
 
     def training(self, epoch):
-        self.model.train()
-        train_loss = 0.0
-        mean_train_loss = 0.0
-        tbar = tqdm(self.train_loader)
-        num_batch_train = len(self.train_loader)
         print(
             "[ Training -- Epoch : {} ; Current time : {} ]".format(epoch, datetime.datetime.now().strftime(
                 '%Y.%m.%d-%H:%M:%S')))
+        self.model.train()
+        train_loss = 0.0
+        mean_train_loss = 0.0
+        num_batch_train = len(self.train_loader)
+        tbar = tqdm(self.train_loader)
         for i, sample in enumerate(tbar):
             x_batch, y_batch = sample['image'], sample['label']
             # move the data from cpu to gpu
@@ -101,20 +100,23 @@ class Trainer:
 
         # save the trained models after each epoch
         model_save_path = os.path.join(self.args.save_model_dir, "model_{}-th_epoch.pkl".format(epoch))
-        torch.save(self.model.state_dict(), model_save_path)
+        if self.args.cuda:
+            torch.save(self.model.module.state_dict(), model_save_path)
+        else:
+            torch.save(self.model.state_dict(), model_save_path)
         print("---[Save model] : Save model to " + self.args.save_model_dir)
         self.writer.add_scalar('train/mean_loss_epoch', mean_train_loss, epoch)
         print('---[Loss]:{}'.format(mean_train_loss))
 
     def validation(self, epoch):
+        print(
+            "[ Validation -- Epoch : {} ; Current time : {} ]".format(epoch, datetime.datetime.now().strftime(
+                '%Y.%m.%d-%H:%M:%S')))
         val_loss = 0.0
         mean_val_loss = 0.0
         self.model.eval()
         self.evaluator.reset()
         tbar = tqdm(self.val_loader)
-        print(
-            "[ Validation -- Epoch : {} ; Current time : {} ]".format(epoch, datetime.datetime.now().strftime(
-                '%Y.%m.%d-%H:%M:%S')))
         # Do not record the gradient
         with torch.no_grad():
             for i, samples in enumerate(tbar):
@@ -152,7 +154,7 @@ def main():
 
     parser.add_argument('--train-log-dir', type=str, default='train_log_dir',
                         help='where the logs are stored')
-    parser.add_argument('--data-dir', type=str, default='E:\Tobias\Data\data\images',
+    parser.add_argument('--data-dir', type=str, default='data',
                         help='where the data are placed')
     parser.add_argument('--save-model-dir', type=str, default='trained_models',
                         help='where the model are saved')
@@ -192,7 +194,7 @@ def main():
     # cuda, seed and logging
     parser.add_argument('--use-cuda', action='store_true', default=True,
                         help='enables CUDA training')
-    parser.add_argument('--gpu-ids', type=str, default='0,1,2,3',
+    parser.add_argument('--gpu-ids', type=str, default='0,1,2',
                         help='use which gpu to train, must be a \
                             comma-separated list of integers only (default=0)')
     # checking point
@@ -209,7 +211,14 @@ def main():
         except ValueError:
             raise ValueError('Argument --gpu_ids must be a comma-separated list of integers only')
 
-    print("......Start Training dataset......")
+    if not os.path.exists(args.save_model_dir):
+        os.mkdir(args.save_model_dir)
+
+    if not os.path.exists(args.data_dir):
+        print("'{} directory is not found!'".format(args.data_dir))
+        raise FileNotFoundError
+
+    print("......Start Training......")
     trainer = Trainer(args=args)
 
     for n in range(args.epochs):
@@ -223,8 +232,6 @@ def main():
 
     print("......Finish training......")
     trainer.writer.close()
-
-
 
 
 if __name__ == '__main__':
