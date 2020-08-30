@@ -9,9 +9,8 @@ using deeplabv3_resnet defined in Pytorch.
     --dataloaders
     --trained_models (for saving trained models)
     --images    (for the images you wanna predict)
-    --predicted_masks (for the decoded predicted masks)
+    --output (for the decoded predicted masks)
     --train_log_dir (for logging information)
-    --constant.py
     --install.sh    (for the installation instruction)
     --make_train_val_test.py    (for splitting dataset into 3 parts)
     --predict.py    
