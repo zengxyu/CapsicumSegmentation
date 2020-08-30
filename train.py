@@ -168,10 +168,10 @@ def main():
     # training hyper params
     parser.add_argument('--epochs', type=int, default=1000, metavar='N',
                         help='number of epochs to train (default: auto)')
-    parser.add_argument('--batch-size', type=int, default=2,
+    parser.add_argument('--batch-size', type=int, default=16,
                         metavar='N', help='input batch size for \
                                     training (default: auto)')
-    parser.add_argument('--val-batch-size', type=int, default=4,
+    parser.add_argument('--val-batch-size', type=int, default=16,
                         metavar='N', help='input batch size for \
                                     validation (default: auto)')
     parser.add_argument('--num-classes', type=int, default=4,
@@ -190,9 +190,9 @@ def main():
                         help='lr scheduler mode: (default: poly)')
 
     # cuda, seed and logging
-    parser.add_argument('--use-cuda', action='store_true', default=False,
+    parser.add_argument('--use-cuda', action='store_true', default=True,
                         help='enables CUDA training')
-    parser.add_argument('--gpu-ids', type=str, default='0',
+    parser.add_argument('--gpu-ids', type=str, default='0,1,2,3',
                         help='use which gpu to train, must be a \
                             comma-separated list of integers only (default=0)')
     # checking point
