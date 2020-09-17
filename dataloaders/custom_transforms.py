@@ -83,6 +83,20 @@ class RandomHorizontalFlip(object):
                 'label': mask}
 
 
+class RandomChangeBackground(object):
+    def __call__(self, sample):
+        img = np.array(sample['image'])
+        mask = np.array(sample['label'])
+        r, g, b = img[:, :, 0], img[:, :, 1], img[:, :, 2]
+        if random.random() < 0.5:
+            r[mask == 0] = random.randint(200, 255)
+            g[mask == 0] = random.randint(200, 255)
+            b[mask == 0] = random.randint(200, 255)
+        img = np.dstack([r, g, b])
+        return {'image': Image.fromarray(img),
+                'label': Image.fromarray(mask)}
+
+
 class RandomVerticalFlip(object):
     def __call__(self, sample):
         img = sample['image']
@@ -184,9 +198,24 @@ class FixedResize(object):
 
 class FixedResizeImage(object):
     def __init__(self, size):
-        self.size = (size[1], size[0])  # size: (h, w)
+        self.crop_size = size
+        # self.size = (size[1], size[0])  # size: (h, w)
 
     def __call__(self, img):
-        img = img.resize(self.size, Image.BILINEAR)
+        w, h = img.size
+        if w > h:
+            oh = self.crop_size[0]
+            ow = int(1.0 * w * oh / h)
+        else:
+            ow = self.crop_size[1]
+            oh = int(1.0 * h * ow / w)
+        img = img.resize((ow, oh), Image.BILINEAR)
+        # center crop
+        w, h = img.size
+        x1 = int(round((w - self.crop_size[1]) / 2.))
+        y1 = int(round((h - self.crop_size[0]) / 2.))
+        x1e = x1 + self.crop_size[1]
+        y1e = y1 + self.crop_size[0]
+        img = img.crop((x1, y1, x1e, y1e))
 
         return img

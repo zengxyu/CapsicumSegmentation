@@ -93,7 +93,7 @@ class Trainer:
             global_step = i + num_batch_train * epoch
             self.writer.add_scalar('train/mean_loss_iteration', loss.item(), global_step)
             # visualize images ten times each epoch
-            if i % (num_batch_train // 10) == 0:
+            if i % (num_batch_train // 100) == 0:
                 # y_batch [batch_size, width, height]
                 # yhat_batch [batch_size, class, width, height]
                 self.summary.visualize_image(self.writer, x_batch, y_batch, yhat_batch['out'], self.num_classes,
@@ -155,7 +155,7 @@ def main():
 
     parser.add_argument('--train-log-dir', type=str, default='train_log_dir',
                         help='where the logs are stored')
-    parser.add_argument('--data-dir', type=str, default='data',
+    parser.add_argument('--data-dir', type=str, default='E:\Tobias\Data\data\images',
                         help='where the data are placed')
     parser.add_argument('--save-model-dir', type=str, default='trained_models',
                         help='where the model are saved')
@@ -171,10 +171,10 @@ def main():
     # training hyper params
     parser.add_argument('--epochs', type=int, default=1000, metavar='N',
                         help='number of epochs to train (default: auto)')
-    parser.add_argument('--batch-size', type=int, default=16,
+    parser.add_argument('--batch-size', type=int, default=4,
                         metavar='N', help='input batch size for \
                                     training (default: auto)')
-    parser.add_argument('--val-batch-size', type=int, default=16,
+    parser.add_argument('--val-batch-size', type=int, default=4,
                         metavar='N', help='input batch size for \
                                     validation (default: auto)')
     parser.add_argument('--num-classes', type=int, default=4,
@@ -193,7 +193,7 @@ def main():
                         help='lr scheduler mode: (default: poly)')
 
     # cuda, seed and logging
-    parser.add_argument('--use-cuda', action='store_true', default=True,
+    parser.add_argument('--use-cuda', action='store_true', default=False,
                         help='enables CUDA training')
     parser.add_argument('--gpu-ids', type=str, default='0,1,2',
                         help='use which gpu to train, must be a \

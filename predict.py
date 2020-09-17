@@ -72,6 +72,27 @@ def predict_single_image(args, image_path):
     return y_hat_rgb
 
 
+def load_trunc_bonn_image(image_path):
+    crop_size = (300, 400)
+    img = Image.open(image_path)
+    w, h = img.size
+    if w > h:
+        oh = crop_size[0]
+        ow = int(1.0 * w * oh / h)
+    else:
+        ow = crop_size[1]
+        oh = int(1.0 * h * ow / w)
+    img = img.resize((ow, oh), Image.BILINEAR)
+    # center crop
+    w, h = img.size
+    x1 = int(round((w - crop_size[1]) / 2.))
+    y1 = int(round((h - crop_size[0]) / 2.))
+    x1e = x1 + crop_size[1]
+    y1e = y1 + crop_size[0]
+    img = img.crop((x1, y1, x1e, y1e))
+    return img
+
+
 def compare_pred_mask_and_ground_truth(args, pred_mask, ground_truth_mask, show=False):
     pred_mask = ImageOps.expand(pred_mask, border=(0, 0, 2, 2), fill=(255, 255, 255))
     pred_mask = np.array(pred_mask).astype(np.uint8)
@@ -121,7 +142,7 @@ if __name__ == '__main__':
                         help='number of classes')
     parser.add_argument('--output', type=str, default='output',
                         help='where the output images are saved')
-    parser.add_argument('--model-path', type=str, default='trained_models/model_0-th_epoch.pkl',
+    parser.add_argument('--model-path', type=str, default='trained_models/model_25-th_epoch.pkl',
                         help='where the trained model is inputted ')
     args = parser.parse_args()
     if not os.path.exists(args.output):
@@ -133,9 +154,9 @@ if __name__ == '__main__':
     # predict_from_loader(args)
 
     # predict images
-    image_path = "images/synthetic_image_color_1.png"
-    ground_truth_path = "images/synthetic_label_class_colorscale_1.png"
+    image_path = "images/frame0100.jpg"
+    ground_truth_path = "images/frame0100.jpg"
 
     pred_mask = predict_single_image(args, image_path)
-    ground_truth_mask = load_ground_truth(args, ground_truth_path)
-    compare_pred_mask_and_ground_truth(args, pred_mask, ground_truth_mask, True)
+    trunc_image = load_trunc_bonn_image(image_path)
+    compare_pred_mask_and_ground_truth(args, pred_mask, trunc_image, True)
