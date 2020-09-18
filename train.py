@@ -6,6 +6,11 @@
     Description :   Train
 -------------------------------------------------
 """
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
+
 import argparse
 import numpy as np
 import torch
@@ -18,7 +23,6 @@ from torchvision.models.segmentation.deeplabv3 import DeepLabHead
 
 from dataloaders.calculate_weights import calculate_weigths_labels
 from dataloaders import data_loader
-import os
 import datetime
 from tqdm import tqdm
 import shutil

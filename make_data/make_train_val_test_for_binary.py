@@ -7,9 +7,13 @@
 -------------------------------------------------
 """
 
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
+
 from sklearn.model_selection import train_test_split
 import pickle
-import os
 import random
 
 from util import common_util
