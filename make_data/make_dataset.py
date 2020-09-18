@@ -7,6 +7,9 @@
 -------------------------------------------------
 """
 import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 import numpy as np
 import cv2 as cv
