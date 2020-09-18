@@ -19,6 +19,7 @@ from PIL import Image, ImageOps
 
 from dataloaders.capsicum import CapsicumDataset
 from dataloaders.composed_transformer import ComposedTransformer
+from util import common_util
 from util.utils import decode_segmap
 
 
@@ -131,6 +132,8 @@ def predict_from_loader(args):
 if __name__ == '__main__':
     import argparse
 
+    configs = common_util.load_config()
+
     parser = argparse.ArgumentParser('Pytorch Deeplabv3_resnet Predicting')
     parser.add_argument('--data-dir', type=str, default='E:\Tobias\Data\data\images',
                         help='where the data are placed')
@@ -138,7 +141,7 @@ if __name__ == '__main__':
                         help='base image size')
     parser.add_argument('--crop-size', type=tuple, default=(300, 400),
                         help='crop image size')
-    parser.add_argument('--num-classes', type=int, default=4,
+    parser.add_argument('--num-classes', type=int, default=configs['num_classes'],
                         help='number of classes')
     parser.add_argument('--output', type=str, default='output',
                         help='where the output images are saved')

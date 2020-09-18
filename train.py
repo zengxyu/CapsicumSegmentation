@@ -22,6 +22,8 @@ import os
 import datetime
 from tqdm import tqdm
 import shutil
+
+from util import common_util
 from util.summaries import TensorboardSummary
 from util.metrics import Evaluator
 
@@ -30,7 +32,7 @@ class Trainer:
     def __init__(self, args):
         self.args = args
         self.model = self.define_model()
-        self.train_loader, self.val_loader, self.test_loader, self.num_classes = data_loader(
+        self.train_loader, self.val_loader, self.test_loader = data_loader(
             args)
         self.summary = TensorboardSummary(self.args.train_log_dir)
         self.writer = self.summary.create_summary()
@@ -40,7 +42,7 @@ class Trainer:
                 weight = np.load(classes_weights_path)
             else:
                 weight = calculate_weigths_labels(data_dir=args.data_dir, dataloader=self.train_loader,
-                                                  num_classes=self.num_classes)
+                                                  num_classes=self.args.num_classes)
             weight = torch.from_numpy(weight.astype(np.float32))
         else:
             weight = None
@@ -52,7 +54,7 @@ class Trainer:
                         {'params': self.model.classifier.parameters(), 'lr': args.lr * 10}]
         self.optimizer = optim.Adam(train_params, lr=1e-3, weight_decay=1e-5, eps=1e-08)
         self.lr_scheduler = lr_scheduler.StepLR(optimizer=self.optimizer, step_size=10, gamma=0.1)
-        self.evaluator = Evaluator(self.num_classes)
+        self.evaluator = Evaluator(self.args.num_classes)
         if self.args.cuda:
             self.model = nn.DataParallel(self.model, device_ids=list(range(len(args.gpu_ids)))).cuda()
             self.lossfn = self.lossfn.cuda()
@@ -96,7 +98,7 @@ class Trainer:
             if i % (num_batch_train // 100) == 0:
                 # y_batch [batch_size, width, height]
                 # yhat_batch [batch_size, class, width, height]
-                self.summary.visualize_image(self.writer, x_batch, y_batch, yhat_batch['out'], self.num_classes,
+                self.summary.visualize_image(self.writer, x_batch, y_batch, yhat_batch['out'], self.args.num_classes,
                                              global_step)
 
         # save the trained models after each epoch
@@ -151,11 +153,12 @@ class Trainer:
 
 
 def main():
+    configs = common_util.load_config()
     parser = argparse.ArgumentParser("Pytorch Deeplabv3_Resnet Training")
 
     parser.add_argument('--train-log-dir', type=str, default='train_log_dir',
                         help='where the logs are stored')
-    parser.add_argument('--data-dir', type=str, default='E:\Tobias\Data\data\images',
+    parser.add_argument('--data-dir', type=str, default=configs['root_dir'],
                         help='where the data are placed')
     parser.add_argument('--save-model-dir', type=str, default='trained_models',
                         help='where the model are saved')
@@ -163,21 +166,21 @@ def main():
                         help='How ofter, we save the model to disk')
 
     parser.add_argument('--workers', type=int, default=4, metavar='N', help='dataloader threads')
-    parser.add_argument('--base-size', type=int, default=600,
+    parser.add_argument('--base-size', type=int, default=configs['base_image_size'],
                         help='base image size')
-    parser.add_argument('--crop-size', type=tuple, default=(300, 400),
+    parser.add_argument('--crop-size', type=tuple, default=configs['crop_size'],
                         help='crop image size')
 
     # training hyper params
     parser.add_argument('--epochs', type=int, default=1000, metavar='N',
                         help='number of epochs to train (default: auto)')
-    parser.add_argument('--batch-size', type=int, default=4,
+    parser.add_argument('--batch-size', type=int, default=configs['batch_size'],
                         metavar='N', help='input batch size for \
                                     training (default: auto)')
-    parser.add_argument('--val-batch-size', type=int, default=4,
+    parser.add_argument('--val-batch-size', type=int, default=configs['val_batch_size'],
                         metavar='N', help='input batch size for \
                                     validation (default: auto)')
-    parser.add_argument('--num-classes', type=int, default=4,
+    parser.add_argument('--num-classes', type=int, default=configs['num_classes'],
                         metavar='N', help='class number')
 
     parser.add_argument('--use-balanced-weights', action='store_true', default=True,
@@ -193,9 +196,9 @@ def main():
                         help='lr scheduler mode: (default: poly)')
 
     # cuda, seed and logging
-    parser.add_argument('--use-cuda', action='store_true', default=False,
+    parser.add_argument('--use-cuda', action='store_true', default=True,
                         help='enables CUDA training')
-    parser.add_argument('--gpu-ids', type=str, default='0,1,2',
+    parser.add_argument('--gpu-ids', type=str, default=configs['gpu_ids'],
                         help='use which gpu to train, must be a \
                             comma-separated list of integers only (default=0)')
     # checking point

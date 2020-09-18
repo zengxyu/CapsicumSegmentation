@@ -17,8 +17,8 @@ from dataloaders.composed_transformer import ComposedTransformer
 
 
 class CapsicumDataset(Dataset):
-    def __init__(self, root="data", split="train", base_size=600, crop_size=(300, 400)):
-        self.num_classes = 4
+    def __init__(self, root="data", split="train", base_size=600, crop_size=(300, 400), num_classes=2):
+        self.num_classes = num_classes
         self.image_height = None
         self.image_width = None
         self.root = root
@@ -41,22 +41,23 @@ class CapsicumDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, index):
-        image_path, label_paths = self.data[index]
+        image_path, label_path = self.data[index]
         # image
         image = Image.open(image_path).convert('RGB')
         if self.image_height is None or self.image_width is None:
             self.image_width, self.image_height = image.size
         # label
-        label = np.zeros((self.image_height, self.image_width), dtype=np.int)
-        # synthesis the label
-        for i, label_path in enumerate(label_paths):
-            lb = np.array(Image.open(label_path).convert('L'))
-            # 0-background, 1-leaf, 2-capsicum, 3,4,5,6,7-different kinds of stems
-            if i < self.num_classes - 1:
-                label += lb * (i + 1)
-            else:
-                label += lb * (self.num_classes - 1)
-        label = Image.fromarray(label.astype(np.uint8))
+        label = Image.open(label_path).convert('L')
+        # label = np.zeros((self.image_height, self.image_width), dtype=np.int)
+        # # synthesis the label
+        # for i, label_path in enumerate(label_paths):
+        #     lb = np.array(Image.open(label_path).convert('L'))
+        #     # 0-background, 1-leaf, 2-capsicum, 3,4,5,6,7-different kinds of stems
+        #     if i < self.num_classes - 1:
+        #         label += lb * (i + 1)
+        #     else:
+        #         label += lb * (self.num_classes - 1)
+        # label = Image.fromarray(label.astype(np.uint8))
         # sample
         sample = {'image': image, 'label': label}
 

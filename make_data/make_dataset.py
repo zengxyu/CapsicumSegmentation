@@ -16,6 +16,8 @@ import colorsys
 from PIL import Image
 from tqdm import tqdm
 
+from util import common_util
+
 
 def make_augmented_dataset(root_dir, sub_dir):
     dir_read = os.path.join(root_dir, sub_dir, sub_dir + "_image_color")
@@ -103,7 +105,8 @@ def change_hue(img):
 
 
 if __name__ == '__main__':
-    root_dir = "../data"
+    configs = common_util.load_config()
+    root_dir = configs['root_dir']
     sub_dirs = ['synthetic', 'empirical']
     for dir in sub_dirs:
         print("处理目录", dir)

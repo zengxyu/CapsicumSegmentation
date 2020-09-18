@@ -14,7 +14,7 @@ import random
 
 from util import common_util
 
-NUM_CLASS = 7
+NUM_CLASS = 2
 train_test_ratio = 0.9
 train_val_ratio = 0.9
 
@@ -52,16 +52,13 @@ class SplitTool(object):
             # labels paths
             lb_paths = []
             for i in range(1, im_amounts + 1):
-                temp = []
-                for cl in range(1, NUM_CLASS + 1):
-                    class_dir = "{}_label_class_{}_grayscale_binary".format(db, cl)
-                    name = "{}_label_class_{}_grayscale_{}.png".format(db, cl, i)
-                    lb_path = os.path.join(label_dir, os.path.join(class_dir, name))
-                    if not os.path.exists(lb_path):
-                        print('Label path {} not available ! '.format(lb_path))
-                        raise FileNotFoundError
-                    temp.append(lb_path)
-                lb_paths.append(temp)
+                class_dir = "{}_label_class_{}_grayscale_binary".format(db, 2)
+                name = "{}_label_class_{}_grayscale_{}.png".format(db, 2, i)
+                lb_path = os.path.join(label_dir, os.path.join(class_dir, name))
+                if not os.path.exists(lb_path):
+                    print('Label path {} not available ! '.format(lb_path))
+                    raise FileNotFoundError
+                lb_paths.append(lb_path)
             # mapping from image to labels
             data = []
             for i in range(im_amounts):
