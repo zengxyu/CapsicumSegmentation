@@ -217,6 +217,7 @@ def main():
         try:
             print("GPU Ids: ", args.gpu_ids)
             os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_ids
+            CUDA: 1
             args.gpu_ids = [int(s) for s in args.gpu_ids.split(',')]
         except ValueError:
             raise ValueError('Argument --gpu_ids must be a comma-separated list of integers only')
