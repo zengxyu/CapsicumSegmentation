@@ -5,6 +5,7 @@ joblib
 kiwisolver
 matplotlib
 numpy
+scikit-build
 opencv-python
 Pillow
 protobuf
@@ -19,5 +20,4 @@ threadpoolctl
 torch
 torchvision
 tqdm
-
 PyYAML
