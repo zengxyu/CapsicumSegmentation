@@ -215,7 +215,8 @@ def main():
     if args.cuda:
         print("Use NVIDIA GPU to train")
         try:
-            os.environ["CUDA_VISIBLE_DEVICES"] = '1,2'
+            print("GPU Ids: ", args.gpu_ids)
+            os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_ids
             args.gpu_ids = [int(s) for s in args.gpu_ids.split(',')]
         except ValueError:
             raise ValueError('Argument --gpu_ids must be a comma-separated list of integers only')
