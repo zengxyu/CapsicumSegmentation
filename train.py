@@ -213,11 +213,14 @@ def main():
     args.cuda = args.use_cuda and torch.cuda.is_available()
 
     if args.cuda:
+        print("Use NVIDIA GPU to train")
         try:
             os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_ids
             args.gpu_ids = [int(s) for s in args.gpu_ids.split(',')]
         except ValueError:
             raise ValueError('Argument --gpu_ids must be a comma-separated list of integers only')
+    else:
+        print("Use CPU to train")
 
     if os.path.exists(args.train_log_dir):
         # remove the directory first
