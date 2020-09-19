@@ -2,8 +2,8 @@ root_dir: '/home/user/zeng/dataset2/binary_class'
 gpu_ids: '0,1,2,3'
 base_image_size: 600
 crop_size: (300, 400)
-batch_size: 4
-val_batch_size: 4
+batch_size: 8
+val_batch_size: 8
 
 # the same in both developer_config.yaml and server.yaml
 num_classes: 2
