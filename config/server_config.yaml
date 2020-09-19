@@ -1,5 +1,5 @@
 root_dir: '/home/user/zeng/dataset2/binary_class'
-gpu_ids: '0,1,2'
+gpu_ids: '0,1,2,3'
 base_image_size: 600
 crop_size: (300, 400)
 batch_size: 4
