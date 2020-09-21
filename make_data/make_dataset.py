@@ -110,7 +110,7 @@ def change_hue(img):
 if __name__ == '__main__':
     configs = common_util.load_config()
     root_dir = configs['root_dir']
-    sub_dirs = ['synthetic', 'empirical']
+    sub_dirs = ['synthetic', 'empirical', 'Bonn2019']
     for dir in sub_dirs:
         print("处理目录", dir)
         make_augmented_dataset(root_dir, dir)

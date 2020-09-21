@@ -35,7 +35,7 @@ class SplitTool(object):
             image_ibg_gray_dir = os.path.join(root_dir, db, "{}_image_ibg_gray".format(db))
             image_ibg_hsv_dir = os.path.join(root_dir, db, "{}_image_ibg_hsv".format(db))
             image_ibg_inverse_dir = os.path.join(root_dir, db, "{}_image_ibg_inverse".format(db))
-            label_dir = os.path.join(root_dir, db, "{}_label_class_grayscale".format(db))
+            label_dir = os.path.join(root_dir, db, "{}_label_class_grayscale_binary".format(db))
             if not os.path.exists(image_color_dir):
                 print("Image base directory {} not available ! ".format(image_color_dir))
             if not os.path.exists(label_dir):
@@ -56,9 +56,8 @@ class SplitTool(object):
             # labels paths
             lb_paths = []
             for i in range(1, im_amounts + 1):
-                class_dir = "{}_label_class_{}_grayscale_binary".format(db, 2)
                 name = "{}_label_class_{}_grayscale_{}.png".format(db, 2, i)
-                lb_path = os.path.join(label_dir, os.path.join(class_dir, name))
+                lb_path = os.path.join(label_dir, name)
                 if not os.path.exists(lb_path):
                     print('Label path {} not available ! '.format(lb_path))
                     raise FileNotFoundError
@@ -169,7 +168,7 @@ class SplitTool(object):
 def make_data2():
     configs = common_util.load_config()
     root_dir = configs['root_dir']
-    datasets = ["empirical", "synthetic"]
+    datasets = ["empirical", "synthetic", "Bonn2019"]
     SplitTool.split_from_emp_syb(root_dir, datasets)
     print("......Finish splitting data......")
 
