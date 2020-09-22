@@ -22,10 +22,22 @@ NUM_CLASS = 2
 train_test_ratio = 0.9
 train_val_ratio = 0.9
 
+datasets = ["empirical", "synthetic", "Bonn2019"]
+
 
 class SplitTool(object):
     @staticmethod
-    def split_from_emp_syb(root_dir, datasets):
+    def add_label(label_dir, label_paths, db, i):
+        name = "{}_label_class_{}_grayscale_{}.png".format(db, 2, i)
+        lb_path = os.path.join(label_dir, name)
+        if not os.path.exists(lb_path):
+            print('Label path {} not available ! '.format(lb_path))
+            raise FileNotFoundError
+        label_paths.append(lb_path)
+
+    # TODO 小数据集要写多遍
+    @staticmethod
+    def split_from_emp_syb(root_dir):
         train_all = []
         val_all = []
         test_all = []
@@ -56,12 +68,13 @@ class SplitTool(object):
             # labels paths
             lb_paths = []
             for i in range(1, im_amounts + 1):
-                name = "{}_label_class_{}_grayscale_{}.png".format(db, 2, i)
-                lb_path = os.path.join(label_dir, name)
-                if not os.path.exists(lb_path):
-                    print('Label path {} not available ! '.format(lb_path))
-                    raise FileNotFoundError
-                lb_paths.append(lb_path)
+                if db != 'synthetic':
+                    # 若不是synthetic，将路径加20遍
+                    for j in range(20):
+                        SplitTool.add_label(label_dir, lb_paths, db, i)
+                else:
+                    SplitTool.add_label(label_dir, lb_paths, db, i)
+
             # mapping from image to labels
             data = []
             for i in range(im_amounts):
@@ -168,8 +181,7 @@ class SplitTool(object):
 def make_data2():
     configs = common_util.load_config()
     root_dir = configs['root_dir']
-    datasets = ["empirical", "synthetic", "Bonn2019"]
-    SplitTool.split_from_emp_syb(root_dir, datasets)
+    SplitTool.split_from_emp_syb(root_dir)
     print("......Finish splitting data......")
 
 
