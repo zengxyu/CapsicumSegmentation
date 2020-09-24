@@ -172,7 +172,7 @@ def main():
     parser.add_argument('--workers', type=int, default=4, metavar='N', help='dataloader threads')
     parser.add_argument('--base-size', type=int, default=configs['base_image_size'],
                         help='base image size')
-    parser.add_argument('--crop-size', type=tuple, default=configs['crop_size'],
+    parser.add_argument('--crop-size', type=tuple, default=(300, 400),
                         help='crop image size')
 
     # training hyper params
@@ -210,6 +210,7 @@ def main():
                         help='set the checkpoint name')
 
     args = parser.parse_args()
+    # args.crop_size = (int(args.crop_size[0]), int(args.crop_size[1]))
     args.cuda = args.use_cuda and torch.cuda.is_available()
 
     if args.cuda:

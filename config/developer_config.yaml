@@ -1,7 +1,6 @@
 root_dir: 'G:/data/pepper_seg/binary_class/small'
 gpu_ids: '0'
-base_image_size: 60
-crop_size: (30, 40)
+base_image_size: 720
 batch_size: 2
 val_batch_size: 2
 
