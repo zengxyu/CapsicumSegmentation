@@ -126,12 +126,13 @@ class RandomScaleCrop(object):
         self.base_size = base_size
         self.crop_size = crop_size
         self.fill = fill
+        self.short_edge = min(self.base_size[0], self.base_size[1])
 
     def __call__(self, sample):
         img = sample['image']
         mask = sample['label']
         # random scale (short edge)
-        short_size = random.randint(int(self.base_size * 0.6), int(self.base_size * 1))
+        short_size = random.randint(int(self.short_edge * 0.6), int(self.short_edge * 1.5))
         w, h = img.size
         if h > w:
             ow = short_size

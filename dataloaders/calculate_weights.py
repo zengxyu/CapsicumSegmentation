@@ -2,6 +2,8 @@ import os
 from tqdm import tqdm
 import numpy as np
 
+import random
+
 
 def calculate_weigths_labels(data_dir, dataloader, num_classes):
     # Create an instance from the data loader

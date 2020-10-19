@@ -12,7 +12,7 @@ import pickle
 import os
 import random
 
-from util import common_util
+from utils import common_util
 
 NUM_CLASS = 7
 train_test_ratio = 0.9

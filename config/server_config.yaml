@@ -1,8 +1,13 @@
-root_dir: '/home/user/zeng/dataset/binary_class'
-gpu_ids: '1,2'
-base_image_size: 720
-batch_size: 24
-val_batch_size: 24
+root_dir: '/home/zeng/dataset/pepper_binary'
+gpu_ids: '3'
+base_image_size: (720,1280)
+#base_image_size: (600,800)
+crop_image_size: (300,400)
+train_batch_size: 16
+val_batch_size: 16
 
+num_workers: 8
+resume: True
+resume_path: "assets/trained_models/model_ep_44_bt_2000.pkl"
 # the same in both developer_config.yaml and server.yaml
 num_classes: 2

@@ -17,10 +17,10 @@ import os
 import time
 from PIL import Image, ImageOps
 
-from dataloaders.capsicum import CapsicumDataset
+from dataloaders.capsicum_dataset import CapsicumDataset
 from dataloaders.composed_transformer import ComposedTransformer
-from util import common_util
-from util.utils import decode_segmap
+from utils import common_util
+from utils.decode_util import decode_segmap
 
 
 class Predictor:
@@ -30,9 +30,9 @@ class Predictor:
         self.model = self.load_model()
 
     def load_model(self):
-        model = deeplabv3_resnet101(pretrained=False)
+        model = deeplabv3_resnet101(pretrained=True)
         model.classifier[-1] = Conv2d(256, self.num_classes, 1)
-        model.load_state_dict(torch.load(self.model_path))
+        model.load_state_dict(torch.load(self.model_path, map_location='cuda:0'))
         model.eval()
         return model
 
@@ -54,7 +54,7 @@ def load_ground_truth(args, mask_path):
     return mask
 
 
-def predict_single_image(args, image_path):
+def predict_single_image(args, image_path, label_path):
     """
     predict one image, given image path
     :param args:
@@ -63,14 +63,18 @@ def predict_single_image(args, image_path):
     """
     cp_transformer = ComposedTransformer(base_size=args.base_size, crop_size=args.crop_size)
     predictor = Predictor(args.model_path, args.num_classes)
-
-    image = cp_transformer.transform_ts_img(Image.open(image_path).convert('RGB'))
+    sample = {"image": Image.open(image_path).convert('RGB'), "label": Image.open(label_path)}
+    sample = cp_transformer.transform_ts(sample)
+    image = sample["image"]
+    label = sample["label"]
     x = image.unsqueeze(0)
 
     y_hat = predictor.predict(x)  # y_hat size = [batch_size, class, height, width]
     y_hat_rgb = decode_segmap(y_hat.argmax(1)[0], args.num_classes)
     y_hat_rgb = Image.fromarray(y_hat_rgb)
-    return y_hat_rgb
+
+    label = Image.fromarray(np.array(label).astype(np.uint8))
+    return y_hat_rgb, label
 
 
 def load_trunc_bonn_image(image_path):
@@ -135,8 +139,6 @@ if __name__ == '__main__':
     configs = common_util.load_config()
 
     parser = argparse.ArgumentParser('Pytorch Deeplabv3_resnet Predicting')
-    parser.add_argument('--data-dir', type=str, default='E:\Tobias\Data\data\images',
-                        help='where the data are placed')
     parser.add_argument('--base-size', type=int, default=600,
                         help='base image size')
     parser.add_argument('--crop-size', type=tuple, default=(300, 400),
@@ -145,21 +147,20 @@ if __name__ == '__main__':
                         help='number of classes')
     parser.add_argument('--output', type=str, default='output',
                         help='where the output images are saved')
-    parser.add_argument('--model-path', type=str, default='trained_models/model_25-th_epoch.pkl',
+    parser.add_argument('--model-path', type=str, default='assets/trained_models/model_ep_44_bt_2000.pkl',
                         help='where the trained model is inputted ')
     args = parser.parse_args()
     if not os.path.exists(args.output):
         os.mkdir(args.output)
-    if not os.path.exists(args.data_dir):
-        raise FileNotFoundError
 
     # predict from loader
     # predict_from_loader(args)
 
     # predict images
-    image_path = "images/frame0100.jpg"
-    ground_truth_path = "images/frame0100.jpg"
+    image_path = "assets/images/frame0100.jpg"
+    ground_truth_path = "assets/images/frame0100.jpg"
 
-    pred_mask = predict_single_image(args, image_path)
-    trunc_image = load_trunc_bonn_image(image_path)
-    compare_pred_mask_and_ground_truth(args, pred_mask, trunc_image, True)
+    pred_mask, gt_image = predict_single_image(args, image_path, ground_truth_path)
+    # trunc_image = load_trunc_bonn_image(image_path)
+    # gt_image = load_ground_truth(args, ground_truth_path)
+    compare_pred_mask_and_ground_truth(args, pred_mask, gt_image, True)

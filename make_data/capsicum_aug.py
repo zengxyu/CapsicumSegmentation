@@ -44,6 +44,7 @@ def make_augmented_dataset(root_dir, sub_dir):
         mask_path = img_path.replace("image_color", "label_class_colorscale")
         # 1.原图背景变成浅色,
         mask = cv.imread(mask_path, 0)
+
         r, g, b = img[:, :, 0].copy(), img[:, :, 1].copy(), img[:, :, 2].copy()
         r[mask == 0] = random.randint(200, 255)
         g[mask == 0] = random.randint(200, 255)
@@ -74,43 +75,12 @@ def make_augmented_dataset(root_dir, sub_dir):
     # plt.show()
 
 
-def change_hue(img):
-    # 目标色值
-    target_hue = 180
-
-    # 读入图片，转化为 RGB 色值
-    image = Image.fromarray(img)
-
-    # 将 RGB 色值分离
-    image.load()
-    r, g, b = image.split()
-    result_r, result_g, result_b = [], [], []
-    # 依次对每个像素点进行处理
-    for pixel_r, pixel_g, pixel_b in zip(r.getdata(), g.getdata(), b.getdata()):
-        # 转为 HSV 色值
-        h, s, v = colorsys.rgb_to_hsv(pixel_r / 255., pixel_b / 255., pixel_g / 255.)
-        # 转回 RGB 色系
-        rgb = colorsys.hsv_to_rgb(target_hue, s, v)
-        pixel_r, pixel_g, pixel_b = [int(x * 255.) for x in rgb]
-        # 每个像素点结果保存
-        result_r.append(pixel_r)
-        result_g.append(pixel_g)
-        result_b.append(pixel_b)
-
-    r.putdata(result_r)
-    g.putdata(result_g)
-    b.putdata(result_b)
-
-    # 合并图片
-    image = Image.merge('RGB', (r, g, b))
-    # 输出图片
-    return np.array(image)
 
 
 if __name__ == '__main__':
     configs = common_util.load_config()
     root_dir = configs['root_dir']
-    sub_dirs = ['synthetic', 'empirical', 'Bonn2019']
+    sub_dirs = ['synthetic', 'empirical']
     for dir in sub_dirs:
         print("处理目录", dir)
         make_augmented_dataset(root_dir, dir)

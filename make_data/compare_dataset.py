@@ -20,13 +20,13 @@ import random
 
 
 def main1():
-    img = cv.imread('../images/synthetic_image_color_1.png')
+    img = cv.imread('../assets/images/synthetic_image_color_1.png')
     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     cv.waitKey(0)
     cv.destroyAllWindows()
     img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-    mask = cv.imread("../images/synthetic_label_class_colorscale_1.png", 0)
+    mask = cv.imread("../assets/images/synthetic_label_class_colorscale_1.png", 0)
     r, g, b = img[:, :, 0].copy(), img[:, :, 1].copy(), img[:, :, 2].copy()
     r[mask == 0] = random.randint(200, 255)
     g[mask == 0] = random.randint(200, 255)
@@ -53,7 +53,7 @@ def main1():
 
 
 def main2():
-    img = cv.imread('../images/frame0000.jpg')
+    img = cv.imread('../assets/images/frame0000.jpg')
     img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     cv.waitKey(0)
     cv.destroyAllWindows()

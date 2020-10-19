@@ -2,9 +2,9 @@
 .git
 __pycache__
 data
-images
-output
-train_log_dir
-trained_models
+assets/images
+assets/output
+assets/train_log_dir
+assets/trained_models
 README_CN.MD
 
