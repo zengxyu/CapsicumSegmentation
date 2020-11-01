@@ -13,10 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 import numpy as np
 import cv2 as cv
-from matplotlib import pyplot as plt
 import random
-import colorsys
-from PIL import Image
 from tqdm import tqdm
 
 from utils import common_util
