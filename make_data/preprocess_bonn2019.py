@@ -3,7 +3,8 @@
 -------------------------------------------------
     Author :       Xiangyu Zeng
     Date：          2020/9/18
-    Description :
+    Description :   preprocess bonn2019 dataset to be same with the capsicum dataset in directory placement structure,
+                    easy to read
 -------------------------------------------------
 """
 import os

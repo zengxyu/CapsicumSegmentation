@@ -3,7 +3,9 @@
 -------------------------------------------------
     Author :       Xiangyu Zeng
     Date：          2020/8/3
-    Description : Split the data into 3 parts : train, val, test
+    Description :
+                Split the dataset [synthetic, empirical, Bonn2019, pepper_images_l515] into 3 parts :
+                train, val, test, for binary classification resuming training
 -------------------------------------------------
 """
 

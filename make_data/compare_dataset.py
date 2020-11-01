@@ -3,7 +3,7 @@
 -------------------------------------------------
     Author :       Xiangyu Zeng
     Date：          2020/9/5
-    Description :
+    Description : Compare between capsicum dataset images and pepper_images_l515 dataset images
 -------------------------------------------------
 """
 

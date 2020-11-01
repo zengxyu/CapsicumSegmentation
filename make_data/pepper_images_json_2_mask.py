@@ -1,5 +1,18 @@
+"""
+-------------------------------------------------
+    Author :       Xiangyu Zeng
+    Date：          2020/10
+    Description :
+                transform the annotated images, which is saved with polygon form in json files, to binary mask
+                the annotated images is annotated from pepper_images_l515 dataset by hand,
+                using the annotation tool, see github links :
+                https://github.com/uea-computer-vision/django-labeller.git
+-------------------------------------------------
+"""
+
 import os
 import sys
+
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
 import cv2
 import numpy as np
@@ -69,7 +82,8 @@ if __name__ == '__main__':
     root_dir = configs['root_dir']
     pepper_dir = os.path.join(root_dir, "pepper_images_l515")
     pepper_sub_dir = os.path.join(pepper_dir, "2020-07-15")
-    json_file_paths = [os.path.join(pepper_sub_dir, json_file_path) for json_file_path in os.listdir(pepper_sub_dir) if json_file_path.endswith(".json")]
+    json_file_paths = [os.path.join(pepper_sub_dir, json_file_path) for json_file_path in os.listdir(pepper_sub_dir) if
+                       json_file_path.endswith(".json")]
     for json_file_path in json_file_paths:
         # print("JSON FILE PATH: ", json_file_path)
         json_dict = read_json(json_file_path)

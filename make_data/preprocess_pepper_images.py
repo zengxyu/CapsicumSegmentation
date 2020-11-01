@@ -2,10 +2,12 @@
 """
 -------------------------------------------------
     Author :       Xiangyu Zeng
-    Date：          2020/9/18
+    Date：          2020/10
     Description :
 -------------------------------------------------
 """
+
+
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), os.path.pardir))
@@ -56,8 +58,6 @@ def combine_labels():
     # image_dir = "rgb"
     # label_dir = "raw_annotation"
     count = 1
-    # for sub_dir in INPUT_SUB_DIR_NAMES:
-    #     print("处理目录：", sub_dir)
     # E:\Tobias\Dataset_Workspace\Bonn2019_P\train\rgb
     in_image_dir_path = os.path.join(INPUT_ROOT_DIR)
 

@@ -5,28 +5,43 @@ using deeplabv3_resnet defined in Pytorch.
 # The project structure:
 
     Capsicum Segmentation
-    --data (for dataset)
+    --assets (for dataset)
+    ----images (for the images you wanna predict)
+    ----log
+    ----output (for the decoded predicted masks)
+    ----trained_models (for saving trained models)
+    --config
+    --controller
     --dataloaders
-    --trained_models (for saving trained models)
-    --images    (for the images you wanna predict)
-    --output (for the decoded predicted masks)
-    --train_log_dir (for logging information)
-    --install.sh    (for the installation instruction)
-    --make_train_val_test.py    (for splitting dataset into 3 parts)
+    --make_data 
+    --utils
     --predict.py    
     --train.py
+    --test.py
     --README.MD
-    
-(1) Run make_train_val_test.py to make train, val, test dataset csv file, 
+    --README_CN.MD
+    --gitignore
+    --requirements.txt (for the installation instruction)
 
-(2) Run train.py to train the model, 
+(1) Run preprocess_bonn2019.py to make Bonn2019 to be standard capsicum-form dataset
 
-(3) Use following command to check the metrics ( Loss, Acc, IoU ) and intermediate predicted images
+(2) Run pepper_images_json_2_mask.py to transform annotated images from pepper_images_l515 to binary masks
+
+(3) Run preprocess_pepper_images.py to make Bonn2019 to be standard capsicum-form dataset
+
+(4) Run make_train_val_test_for_binary.py to make train, val, test dataset csv file, for training
+    or
+    Run make_train_val_test_for_binary_resume.py to make train, val, test dataset csv file, for training
+
+(5) Run train.py to train
+
+(6) Use following command to check the metrics ( Loss, Acc, IoU ) and intermediate predicted images
     
     tensorboard --logdir=train_log_dir --port=6006
-    
-(4) Run predict.py to predict an image, 
+
+(7) Run predict.py to predict
     change the variable "image_path" to predict your image, 
     change the variable "model_name" to use another trained model
 
-The readme hasn't been updated
+
+    

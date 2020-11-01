@@ -3,7 +3,9 @@
 -------------------------------------------------
     Author :       Xiangyu Zeng
     Date：          2020/9/5
-    Description :
+    Description : make augmented capsicum dataset,
+                    including generating background-inverse images, gray images, inverse images, hsv images,
+                    based on original images
 -------------------------------------------------
 """
 import os
@@ -23,7 +25,7 @@ def make_augmented_dataset(root_dir, sub_dir):
     dir_read = os.path.join(root_dir, sub_dir, sub_dir + "_image_color")
     dir_mask_read = os.path.join(root_dir, sub_dir, sub_dir + "_label_class_colorscale")
     if not os.path.exists(dir_read):
-        print("输入文件夹不存在!!!")
+        print("Inputted directory not existed")
         return
     # 1. 先把背景转为随机的浅色，2. 转换后背景的灰度图， 3. 转换背景后反相图，4. 转换背景后的HSV颜色图片
     transforms = ["image_ibg", "image_ibg_gray", "image_ibg_inverse", "image_ibg_hsv"]
