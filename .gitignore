@@ -2,6 +2,7 @@
 .git
 __pycache__
 data
+assets
 assets/images
 assets/output
 assets/train_log_dir

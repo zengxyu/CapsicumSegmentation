@@ -147,7 +147,7 @@ if __name__ == '__main__':
                         help='number of classes')
     parser.add_argument('--output', type=str, default='output',
                         help='where the output images are saved')
-    parser.add_argument('--model-path', type=str, default='assets/trained_models/model_ep_44_bt_2000.pkl',
+    parser.add_argument('--model-path', type=str, default='assets/trained_models/model_ep_8.pkl',
                         help='where the trained model is inputted ')
     args = parser.parse_args()
     if not os.path.exists(args.output):
@@ -157,8 +157,8 @@ if __name__ == '__main__':
     # predict_from_loader(args)
 
     # predict images
-    image_path = "assets/images/frame0100.jpg"
-    ground_truth_path = "assets/images/frame0100.jpg"
+    image_path = "assets/images/frame0358.jpg"
+    ground_truth_path = "assets/images/frame0358.jpg"
 
     pred_mask, gt_image = predict_single_image(args, image_path, ground_truth_path)
     # trunc_image = load_trunc_bonn_image(image_path)
