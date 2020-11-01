@@ -44,4 +44,6 @@ using deeplabv3_resnet defined in Pytorch.
     change the variable "model_name" to use another trained model
 
 
+Image annotation tools, see github link:
+https://github.com/uea-computer-vision/django-labeller.git
     
