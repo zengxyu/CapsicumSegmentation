@@ -40,8 +40,8 @@ using deeplabv3_resnet defined in Pytorch.
     tensorboard --logdir=train_log_dir --port=6006
 
 (7) Run predict.py to predict
-    change the variable "image_path" to predict your image, 
-    change the variable "model_name" to use another trained model
+    change the augment "image-path" and "gt-path" to the path to your image, 
+    change the augment "model-path" to the trained models
 
 
 Image annotation tools, see github link:

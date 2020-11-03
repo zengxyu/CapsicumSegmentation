@@ -111,7 +111,7 @@ def get_args():
                         help='number of classes')
     parser.add_argument('--output', type=str, default='output',
                         help='where the output images are saved')
-    parser.add_argument('--model-path', type=str, default='assets/trained_models/model_ep_22.pkl',
+    parser.add_argument('--model-path', type=str, default='assets/trained_models/model_ep_8.pkl',
                         help='path to trained models')
     parser.add_argument('--image-path', type=str, default='assets/images/frame0106.jpg',
                         help='path to images which used for prediction')
