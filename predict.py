@@ -8,7 +8,6 @@
 """
 import numpy as np
 import torch
-from torch import nn
 from torch.nn import *
 from torch.utils.data import DataLoader
 from torchvision.models.segmentation import deeplabv3_resnet101
@@ -113,9 +112,9 @@ def get_args():
                         help='where the output images are saved')
     parser.add_argument('--model-path', type=str, default='assets/trained_models/model_ep_8.pkl',
                         help='path to trained models')
-    parser.add_argument('--image-path', type=str, default='assets/images/frame0106.jpg',
+    parser.add_argument('--image-path', type=str, default='assets/images/synthetic_image_color_1.png',
                         help='path to images which used for prediction')
-    parser.add_argument('--gt-path', type=str, default='assets/images/frame0106.jpg',
+    parser.add_argument('--gt-path', type=str, default='assets/images/synthetic_image_color_1.png',
                         help='path to ground truth')
     parser.add_argument('--use-cuda', type=bool, default=True,
                         help='whether to use cuda')
