@@ -32,7 +32,7 @@ def main():
     parser.add_argument('--save-model-interval', type=int, default=100, metavar='N',
                         help='How ofter, we save the model to disk')
     # cuda, num workers
-    parser.add_argument('--use-cuda', action='store_true', default=False,
+    parser.add_argument('--use-cuda', action='store_true', default=True,
                         help='enables CUDA training')
     parser.add_argument('--gpu-ids', type=str, default=configs['gpu_ids'],
                         help='use which gpu to train, must be a \
