@@ -96,10 +96,6 @@ class Controller:
                 # yhat_batch [batch_size, class, width, height]
                 self.summary.visualize_image(self.writer, x_batch, y_batch, yhat_batch['out'], self.args.num_classes,
                                              global_step)
-            # if i % 1000 == 0:
-            #     model_save_path = os.path.join(self.args.save_model_dir, "model_ep_{}_bt_{}.pkl".format(epoch, i))
-            #
-            #     torch.save(self.model.state_dict(), model_save_path)
         self.writer.add_scalar('train/mean_loss_epoch', mean_train_loss, epoch)
         print('---[Loss]:{}'.format(mean_train_loss))
 
