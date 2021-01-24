@@ -1,14 +1,14 @@
 root_dir: 'E:\Tobias\Dataset_Workspace'
 gpu_ids: '0'
-base_image_size: (720,1280)
-#base_image_size: (600,800)
+#base_image_size: (720,1280)
+base_image_size: (600,800)
 crop_image_size: (300,400)
 train_batch_size: 2
 val_batch_size: 2
 
 num_workers: 0
-resume: True
+resume: False
 resume_path: "assets/trained_models/model_ep_44_bt_2000.pkl"
 
 # the same in both developer_config.yaml and server.yaml
-num_classes: 2
+num_classes: 4

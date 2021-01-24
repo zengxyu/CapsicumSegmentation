@@ -32,7 +32,7 @@ def main():
     parser.add_argument('--save-model-interval', type=int, default=100, metavar='N',
                         help='How ofter, we save the model to disk')
     # cuda, num workers
-    parser.add_argument('--use-cuda', action='store_true', default=True,
+    parser.add_argument('--use-cuda', action='store_true', default=False,
                         help='enables CUDA training')
     parser.add_argument('--gpu-ids', type=str, default=configs['gpu_ids'],
                         help='use which gpu to train, must be a \
@@ -46,7 +46,7 @@ def main():
     parser.add_argument('--resume_path', type=str, default=configs['resume_path'],
                         help='path to resume model')
     # image size
-    parser.add_argument('--base-size', type=tuple, default=(720, 1280),
+    parser.add_argument('--base-size', type=tuple, default=(600, 800),
                         help='base image size')
     parser.add_argument('--crop-size', type=tuple, default=(300, 400),
                         help='crop image size')
@@ -63,7 +63,7 @@ def main():
     parser.add_argument('--num-classes', type=int, default=configs['num_classes'],
                         metavar='N', help='class number')
 
-    parser.add_argument('--use-balanced-weights', action='store_true', default=True,
+    parser.add_argument('--use-balanced-weights', action='store_true', default=False,
                         help='whether to use balanced weights (default: False)')
     parser.add_argument('--pre-trained', type=bool, default=True,
                         help='whether to use pre trained deepnetv3_resnet model')
